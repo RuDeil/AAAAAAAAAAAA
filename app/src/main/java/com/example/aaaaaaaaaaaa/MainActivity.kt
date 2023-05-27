@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "AAAApplication.TAG"
 private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
@@ -85,8 +86,12 @@ class MainActivity : AppCompatActivity() {
         wind.text = (weatherInfo.wind?.speed ?: 0).toString() + " м/с"
 
         val sdf = SimpleDateFormat("HH:mm")
-        sunset.text = sdf.format(Date(weatherInfo.sys?.sunset?.toLong() ?: 0L)).toString()
-        sunrise.text = sdf.format(Date(weatherInfo.sys?.sunrise?.toLong() ?: 0L)).toString()
+        sunset.text =
+            sdf.format(Date(TimeUnit.MILLISECONDS.convert(weatherInfo.sys?.sunset?.toLong() ?: 0L, TimeUnit.SECONDS)))
+                .toString()
+        sunrise.text =
+            sdf.format(Date(TimeUnit.MILLISECONDS.convert(weatherInfo.sys?.sunrise?.toLong() ?: 0L, TimeUnit.SECONDS)))
+                .toString()
 
         updated_at.text = "обновлено в ${sdf.format(Calendar.getInstance().time)}"
 
